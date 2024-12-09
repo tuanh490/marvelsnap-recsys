@@ -1,6 +1,7 @@
 import express from 'express';
 import { spawn } from 'child_process';
 import cors from 'cors'
+import axios from 'axios'
 
 const app = express();
 
@@ -9,42 +10,16 @@ const corsOption = {
 }
 
 app.use(cors(corsOption))
-
-// Middleware to parse JSON requests
 app.use(express.json());
 
-app.post('/predict', (req, res) => {
-    const inputData = req.body; // Input features from client
-
-    // Spawn the Python process
-    const pythonProcess = spawn('python', ['script.py']);
-
-    // Send input data to Python process
-    pythonProcess.stdin.write(JSON.stringify(inputData));
-    pythonProcess.stdin.end();
-
-    let result = '';
-
-    // Capture Python stdout
-    pythonProcess.stdout.on('data', (data) => {
-        result += data.toString();
-    });
-
-    // Handle process exit
-    pythonProcess.on('close', () => {
-        try {
-            const predictions = JSON.parse(result); // Parse Python output
-            res.json({ predictions }); // Send predictions to client
-        } catch (error) {
-            res.status(500).json({ error: 'Error parsing prediction output' });
-        }
-    });
-
-    // Handle Python errors
-    pythonProcess.stderr.on('data', (data) => {
-        console.error(`Python error: ${data.toString()}`);
-        res.status(500).json({ error: 'Error from Python script' });
-    });
+app.post('/predict', async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:5000/predict', req.body);
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error calling FastAPI:', error.message);
+        res.status(500).send('Error in FastAPI');
+    }
 });
 
 app.use('/', (req, res) => {
