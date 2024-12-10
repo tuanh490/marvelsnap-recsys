@@ -1,5 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Container from "@mui/material/Container";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import marvelSnapLogo from "./assets/logo.png";
 
 async function fetchAPI() {
   const res = await axios.get("http://localhost:3000");
@@ -30,7 +34,20 @@ function App() {
     sendData().then((data) => setRecommendations(data));
   }, []);
 
-  return <h1>{recommendations}</h1>;
+  return (
+    <Container>
+      <img src={marvelSnapLogo}></img>
+      <h1>Hello World</h1>
+      <List>
+        {recommendations &&
+          recommendations.map((card, index) => (
+            <ListItem key={index}>
+              <p>{card}</p>
+            </ListItem>
+          ))}
+      </List>
+    </Container>
+  );
 }
 
 export default App;
