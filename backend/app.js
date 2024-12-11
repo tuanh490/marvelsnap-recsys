@@ -5,8 +5,9 @@ import mongoose from 'mongoose';
 import session from 'express-session'
 import dotenv from 'dotenv'
 
-import cardRoute from './routers/cards.js'
-import userRoute from './routers/users.js'
+import cardRoute from './routes/cards.js'
+import userRoute from './routes/users.js'
+import collectionRoute from './routes/collections.js'
 
 import ExpressError from './utils/ExpressError.js'
 import passport from './passportStrategy.js'
@@ -53,6 +54,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use('/collection', collectionRoute)
 app.use('/auth', userRoute)
 app.use('/card', cardRoute)
 
