@@ -23,7 +23,6 @@ def predict(req: PredictionRequest):
 
     df_user = pd.DataFrame(columns=df_deck.columns)
     df_user.loc[0] = np.zeros(len(df_deck.columns))
-    cards = ["Magik"]
     for card in cards:
         df_user.loc[:, card] = 1
 
