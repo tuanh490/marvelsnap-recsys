@@ -32,7 +32,8 @@ db.once("open", () => {
 });
 
 const corsOption = {
-    origin: ['http://localhost:5173']
+    origin: ['http://localhost:5173'],
+    credentials: true
 }
 
 app.use(cors(corsOption))

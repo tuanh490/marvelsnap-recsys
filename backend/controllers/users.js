@@ -46,7 +46,3 @@ export function logout(req, res) {
         res.json({ message: 'Logged out Successfully' })
     })
 }
-
-export function getProfile(req, res) {
-    res.json({ message: `Hello, ${req.user.username}!` });
-}
