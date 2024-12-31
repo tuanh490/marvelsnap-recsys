@@ -4,15 +4,14 @@ import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import axios from "axios";
-import { useAuth } from "./context/useAuth";
 
-// Function to send login request
-const loginUser = async (credentials: {
+const registerUser = async (credentials: {
   username: string;
   password: string;
+  confirmPassword: string;
 }) => {
   const res = await axios.post(
-    "http://localhost:3000/auth/login",
+    "http://localhost:3000/auth/register",
     credentials,
     {
       withCredentials: true,
@@ -21,29 +20,34 @@ const loginUser = async (credentials: {
   return res;
 };
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-  const { setUser } = useAuth();
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: loginUser,
-    onSuccess: (data) => {
-      setUser(data.data.user);
-      console.log(data.data.user);
-      setMessage("Successfully Logged In!");
-      navigate({ to: "/" });
+    mutationFn: registerUser,
+    onSuccess: () => {
+      setMessage("Successfully Registered!");
+      navigate({ to: "/login" });
     },
     onError: (error) => {
-      setMessage(error.response?.data?.error || "Login Failed");
+      console.error(error);
+      setMessage(error.response.data.message);
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({ username, password });
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
+    setPasswordError("");
+    mutation.mutate({ username, password, confirmPassword });
   };
 
   return (
@@ -53,7 +57,7 @@ const Login: React.FC = () => {
         onSubmit={handleSubmit}
       >
         <h2 className="text-black text-2xl font-semibold text-center mb-4">
-          Login
+          Register
         </h2>
         <div className="mb-4">
           <TextField
@@ -84,9 +88,29 @@ const Login: React.FC = () => {
             }
           />
         </div>
+        <div className="mb-4">
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            error={mutation.isError && !confirmPassword}
+            helperText={
+              mutation.isError && !confirmPassword
+                ? "Confirm password is required"
+                : ""
+            }
+          />
+        </div>
+        {passwordError && (
+          <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+        )}
         {mutation.isError && (
           <p className="text-red-500 text-sm mb-4">
-            {message || mutation.error?.message || "Login failed"}
+            {message || mutation.error?.message || "Registration failed"}
           </p>
         )}
 
@@ -98,11 +122,11 @@ const Login: React.FC = () => {
           disabled={mutation.status === "pending"}
           className="bg-blue-500 text-white hover:bg-blue-600"
         >
-          {mutation.status === "pending" ? "Logging in..." : "Login"}
+          {mutation.status === "pending" ? "Registering..." : "Register"}
         </Button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;

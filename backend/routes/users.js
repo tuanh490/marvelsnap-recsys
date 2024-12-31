@@ -11,4 +11,12 @@ router.post('/login', login);
 
 router.post('/logout', logout)
 
+router.get('/current-user', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({ user: req.user });
+    } else {
+        res.json({ user: null });
+    }
+});
+
 export default router
