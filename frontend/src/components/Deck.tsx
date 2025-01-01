@@ -3,7 +3,12 @@ import Card from "./Card";
 import { Card as CardUI, CardContent, Typography } from "@mui/material";
 
 interface DeckProps {
-  cards: { name: string; art: string }[];
+  cards: {
+    name: string;
+    art: string;
+    ability: string;
+    series: string;
+  }[];
   cardSize: string;
   deckTitle: string;
   deckDescription: string;
@@ -40,9 +45,11 @@ const Deck: React.FC<DeckProps> = ({
         {cards.slice(0, 12).map((card, index) => (
           <Card
             key={index}
-            cardName={card.name}
-            cardImageUrl={card.art}
-            cardSize={cardSize}
+            name={card.name}
+            ability={card.ability}
+            series={card.series}
+            art={card.art}
+            size={cardSize}
           />
         ))}
       </div>

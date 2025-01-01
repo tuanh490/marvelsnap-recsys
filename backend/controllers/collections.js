@@ -2,8 +2,8 @@ import Collection from "../models/Collection.js"
 import mongoose from "mongoose";
 
 export async function getCollection(req, res) {
-    const collection = await Collection.findById(req.params.id)
-        .populate('user', 'cards')
+    const collection = await Collection.find({ user: req.user._id })
+        .populate('cards')
 
     res.json(collection)
 }

@@ -39,8 +39,8 @@ const IndexPage: React.FC = () => {
             </Typography>
             <Deck
               cards={cards}
-              deckDescription="A deck"
-              deckTitle="Random Deck"
+              deckDescription="This is a terrible deck"
+              deckTitle="Random deck"
               cardSize="w-32"
             />
           </Box>

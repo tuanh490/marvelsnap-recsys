@@ -13,7 +13,7 @@ export async function isCollectionUser(req, res, next) {
     const { id } = req.params;
     const collection = await Collection.findById(id);
     if (!collection.user.equals(req.user._id)) {
-        res.status(401).json({ error: 'Unauthorized access.' });
+        return res.status(401).json({ error: 'Unauthorized access.' });
     }
     next()
 }
@@ -22,7 +22,7 @@ export async function isDeckUser(req, res, next) {
     const { id } = req.params;
     const deck = await Deck.findById(id);
     if (!deck.user.equals(req.user._id)) {
-        res.status(401).json({ error: 'Unauthorized access.' });
+        return res.status(401).json({ error: 'Unauthorized access.' });
     }
     next()
 }
