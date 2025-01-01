@@ -73,7 +73,7 @@ const CardsPage: React.FC = () => {
         throw new Error("Collection data is not available");
       }
 
-      const collectionId = collectionData._id; // Now directly access _id
+      const collectionId = collectionData._id;
 
       const res = await axios.post(
         `http://localhost:3000/collection/${collectionId}`,

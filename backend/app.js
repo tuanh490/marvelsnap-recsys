@@ -13,6 +13,9 @@ import deckRoute from './routes/decks.js'
 import ExpressError from './utils/ExpressError.js'
 import passport from './passportStrategy.js'
 
+import Card from './models/Card.js';
+import Collection from './models/Collection.js';
+
 dotenv.config()
 
 const app = express();
@@ -48,7 +51,7 @@ app.use(
         cookie: {
             secure: false,           // Set to true if using https (recommended in production)
             httpOnly: true,          // Helps prevent XSS attacks
-            maxAge: 24 * 60 * 60 * 1000, // 1 day expiration time for the session cookie
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 1 day expiration time for the session cookie
         },
     })
 );
@@ -63,8 +66,64 @@ app.use('/deck', deckRoute)
 
 app.post('/predict', async (req, res) => {
     try {
-        const response = await axios.post('http://localhost:5000/predict', req.body);
-        res.json(response.data);
+        const collection = await Collection.findById(req.body.collection)
+            .populate('cards', 'name')
+            .exec()
+
+        if (!collection) {
+            return res.status(404).send('Collection not found');
+        }
+
+        const names = collection.cards.map(card => card.name);
+
+        const data = {
+            cards: req.body.cards,
+            collection: names,
+            n_decks: req.body.n_decks
+        }
+
+        const response = await axios.post('http://localhost:5000/predict', data);
+
+        const decks = response.data.recommendations;
+
+        const result = [];
+
+        for (let deck of decks) {
+            const resultDeck = []
+            for (let name of deck) {
+                const card = await Card.findOne({ name: name })
+
+                resultDeck.push(card);
+            }
+            result.push(resultDeck)
+        }
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error calling FastAPI:', error.message);
+        res.status(500).send('Error in FastAPI');
+    }
+});
+
+app.post('/predictForAll', async (req, res) => {
+    try {
+        const response = await axios.post('http://localhost:5000/predictForAll', req.body);
+
+        const decks = response.data.recommendations;
+
+        const result = [];
+
+        for (let deck of decks) {
+            const resultDeck = []
+            for (let name of deck) {
+                const card = await Card.findOne({ name: name })
+
+                resultDeck.push(card);
+            }
+            result.push(resultDeck)
+        }
+
+        res.json(result);
     } catch (error) {
         console.error('Error calling FastAPI:', error.message);
         res.status(500).send('Error in FastAPI');

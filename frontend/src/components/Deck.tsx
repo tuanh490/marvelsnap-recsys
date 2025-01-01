@@ -2,13 +2,18 @@ import React from "react";
 import Card from "./Card";
 import { Card as CardUI, CardContent, Typography } from "@mui/material";
 
+interface cardInfo {
+  _id: string;
+  name: string;
+  cost: number;
+  power: number;
+  ability: string;
+  series: string;
+  art: string;
+}
+
 interface DeckProps {
-  cards: {
-    name: string;
-    art: string;
-    ability: string;
-    series: string;
-  }[];
+  cards: cardInfo[];
   cardSize: string;
   deckTitle: string;
   deckDescription: string;

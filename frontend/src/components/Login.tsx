@@ -6,7 +6,6 @@ import { useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useAuth } from "./context/useAuth";
 
-// Function to send login request
 const loginUser = async (credentials: {
   username: string;
   password: string;
