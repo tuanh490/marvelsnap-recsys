@@ -17,8 +17,9 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const RegisterLazyImport = createFileRoute('/register')()
-const ProfileLazyImport = createFileRoute('/profile')()
 const LoginLazyImport = createFileRoute('/login')()
+const DeckLazyImport = createFileRoute('/deck')()
+const CollectionLazyImport = createFileRoute('/collection')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 
@@ -30,17 +31,23 @@ const RegisterLazyRoute = RegisterLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
 
-const ProfileLazyRoute = ProfileLazyImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
-
 const LoginLazyRoute = LoginLazyImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const DeckLazyRoute = DeckLazyImport.update({
+  id: '/deck',
+  path: '/deck',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/deck.lazy').then((d) => d.Route))
+
+const CollectionLazyRoute = CollectionLazyImport.update({
+  id: '/collection',
+  path: '/collection',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/collection.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   id: '/about',
@@ -72,18 +79,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/collection': {
+      id: '/collection'
+      path: '/collection'
+      fullPath: '/collection'
+      preLoaderRoute: typeof CollectionLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/deck': {
+      id: '/deck'
+      path: '/deck'
+      fullPath: '/deck'
+      preLoaderRoute: typeof DeckLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
     '/register': {
@@ -101,16 +115,18 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/collection': typeof CollectionLazyRoute
+  '/deck': typeof DeckLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/collection': typeof CollectionLazyRoute
+  '/deck': typeof DeckLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
 }
 
@@ -118,33 +134,43 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/collection': typeof CollectionLazyRoute
+  '/deck': typeof DeckLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/login' | '/profile' | '/register'
+  fullPaths: '/' | '/about' | '/collection' | '/deck' | '/login' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/profile' | '/register'
-  id: '__root__' | '/' | '/about' | '/login' | '/profile' | '/register'
+  to: '/' | '/about' | '/collection' | '/deck' | '/login' | '/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/collection'
+    | '/deck'
+    | '/login'
+    | '/register'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
+  CollectionLazyRoute: typeof CollectionLazyRoute
+  DeckLazyRoute: typeof DeckLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
-  ProfileLazyRoute: typeof ProfileLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
+  CollectionLazyRoute: CollectionLazyRoute,
+  DeckLazyRoute: DeckLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
-  ProfileLazyRoute: ProfileLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
 }
 
@@ -160,8 +186,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/collection",
+        "/deck",
         "/login",
-        "/profile",
         "/register"
       ]
     },
@@ -171,11 +198,14 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.lazy.tsx"
     },
+    "/collection": {
+      "filePath": "collection.lazy.tsx"
+    },
+    "/deck": {
+      "filePath": "deck.lazy.tsx"
+    },
     "/login": {
       "filePath": "login.lazy.tsx"
-    },
-    "/profile": {
-      "filePath": "profile.lazy.tsx"
     },
     "/register": {
       "filePath": "register.lazy.tsx"

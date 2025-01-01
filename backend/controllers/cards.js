@@ -9,3 +9,9 @@ export async function getCard(req, res) {
 
     res.json(card)
 }
+
+export async function getAllCards(req, res) {
+    const cards = await Card.find({})
+
+    res.json(cards)
+}

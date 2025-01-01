@@ -3,7 +3,12 @@ export default {
   content: ['./src/**/*.{ts,tsx,jsx,js}'],
   important: "#root",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'orbitron': ['orbitron', 'sans-serif'],
+        'roboto': ['Roboto', 'sans-serif']
+      }
+    },
   },
   plugins: [],
   corePlugins: {

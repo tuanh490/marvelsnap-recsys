@@ -53,10 +53,10 @@ const Register: React.FC = () => {
   return (
     <div className="flex justify-center items-center h-full w-full mt-20">
       <form
-        className="w-full max-w-sm p-6 bg-gray-100 rounded shadow-md"
+        className="w-full max-w-sm p-6 bg-transparent rounded shadow-md"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-black text-2xl font-semibold text-center mb-4">
+        <h2 className="text-white text-2xl font-semibold text-center mb-4">
           Register
         </h2>
         <div className="mb-4">
@@ -71,6 +71,25 @@ const Register: React.FC = () => {
             helperText={
               mutation.isError && !username ? "Username is required" : ""
             }
+            sx={{
+              input: {
+                color: "white",
+              },
+              label: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
           />
         </div>
         <div className="mb-4">
@@ -86,6 +105,25 @@ const Register: React.FC = () => {
             helperText={
               mutation.isError && !password ? "Password is required" : ""
             }
+            sx={{
+              input: {
+                color: "white",
+              },
+              label: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
           />
         </div>
         <div className="mb-4">
@@ -103,6 +141,25 @@ const Register: React.FC = () => {
                 ? "Confirm password is required"
                 : ""
             }
+            sx={{
+              input: {
+                color: "white",
+              },
+              label: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
           />
         </div>
         {passwordError && (
